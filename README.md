@@ -5,7 +5,7 @@ Noctis Maledictionem is a mod centered around a terrifying ..... This mod also a
 // insert more description here
 
 For those curious, the name "Noctis Maledictionem" is latin for "nighttime curse".
-Naturally, this name was chosen because latin sounds cool, perhaps even a bit mysterious, which fits well with the theme of this mod.
+Naturally, this name was chosen because latin sounds cool, perhaps even a bit menacing and mysterious, which fits well with the theme of this mod.
 
 ## Wiki
 
