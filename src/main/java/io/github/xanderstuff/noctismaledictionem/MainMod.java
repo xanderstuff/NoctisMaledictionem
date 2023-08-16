@@ -1,5 +1,6 @@
 package io.github.xanderstuff.noctismaledictionem;
 
+import io.github.xanderstuff.noctismaledictionem.item.Items;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -11,7 +12,7 @@ public class MainMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-
 //		LOGGER.info("Hello Fabric world!");
+		Items.registerAll();
 	}
 }
