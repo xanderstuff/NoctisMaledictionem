@@ -1,9 +1,22 @@
-# Fabric Example Mod
+# Noctis Maledictionem
 
-## Setup
+Noctis Maledictionem is a mod centered around a terrifying ..... This mod also adds ........
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+// insert more description here
+
+For those curious, the name "Noctis Maledictionem" is latin for "nighttime curse".
+Naturally, this name was chosen because latin sounds cool, perhaps even a bit mysterious, which fits well with the theme of this mod.
+
+## Wiki
+
+For a more detailed guide on this mod's content, check out the [wiki](https://github.com/xanderstuff/NoctisMaledictionem/wiki).
+
+## Credits
+
+TheRebelT: Original mod concept and ideas, textures, models and animations, sounds
+
+XanderStuff: Programming
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+All Rights Reserved
