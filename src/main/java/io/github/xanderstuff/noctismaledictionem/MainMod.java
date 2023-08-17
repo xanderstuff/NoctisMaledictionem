@@ -1,5 +1,6 @@
 package io.github.xanderstuff.noctismaledictionem;
 
+import io.github.xanderstuff.noctismaledictionem.entity.Entities;
 import io.github.xanderstuff.noctismaledictionem.item.Items;
 import net.fabricmc.api.ModInitializer;
 
@@ -14,5 +15,6 @@ public class MainMod implements ModInitializer {
 	public void onInitialize() {
 //		LOGGER.info("Hello Fabric world!");
 		Items.registerAll();
+		Entities.registerAll();
 	}
 }
