@@ -6,6 +6,7 @@ import net.minecraft.entity.ai.RangedAttackMob;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.PathAwareEntity;
@@ -13,9 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
-import net.minecraft.potion.Potions;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.Vec3d;
@@ -29,6 +28,7 @@ import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.List;
 import java.util.UUID;
 
 //TODO: perhaps the Crone should extend MerchantEntity for trading?
@@ -87,36 +87,31 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 
 	@Override
 	public void attack(LivingEntity target, float pullProgress) {
-		// this is based off of vanilla's WitchEntity#attack
-
+		// this method is based off of vanilla's WitchEntity#attack
 		Vec3d targetVelocity = target.getVelocity();
 		double deltaX = target.getX() + targetVelocity.x - this.getX();
 		double deltaY = target.getEyeY() - this.getY() - 1.1f; // magic number: probably as a way to guess where the target's feet are
 		double deltaZ = target.getZ() + targetVelocity.z - this.getZ();
 		double targetDistance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 
-		// choose potion to throw
-		Potion potion = Potions.HARMING;
-		/*if (target instanceof RaiderEntity) {
-			if (target.getHealth() <= 4.0F) {
-				potion = Potions.HEALING;
-			} else {
-				potion = Potions.REGENERATION;
-			}
-
-			this.setTarget(null);
-		} else if*/
-		if (targetDistance >= 8.0f && !target.hasStatusEffect(StatusEffects.SLOWNESS)) {
-			potion = Potions.SLOWNESS;
-		} else if (target.getHealth() >= 8.0f && !target.hasStatusEffect(StatusEffects.POISON)) {
-			potion = Potions.POISON;
-		} else if (targetDistance <= 3.0f && !target.hasStatusEffect(StatusEffects.WEAKNESS) && random.nextFloat() < 0.25f) {
-			potion = Potions.WEAKNESS;
-		}
+		// choose a potion to throw
+		var choiceIndex = random.nextInt(8); // 8: pick 0..7 inclusive
+		StatusEffectInstance statusEffect = switch (choiceIndex) {
+			// yes, I could just put these in a list and pick from the list instead, but I'm avoiding creating a lot of unused objects each time or overkill abstraction with a helper method
+			case 0 -> new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 0, 0);
+			case 1 -> new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 0, 0); // double chance for instant damage
+			case 2 -> new StatusEffectInstance(StatusEffects.SLOWNESS, 90 * 20, 0);
+			case 3 -> new StatusEffectInstance(StatusEffects.WEAKNESS, 90 * 20, 0);
+			case 4 -> new StatusEffectInstance(StatusEffects.BLINDNESS, 60 * 20, 0);
+			case 5 -> new StatusEffectInstance(StatusEffects.HUNGER, 60 * 20, 0);
+			case 6 -> new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 30 * 20, 0);
+			case 7 -> new StatusEffectInstance(StatusEffects.WITHER, 30 * 20, 0);
+			default -> throw new IllegalStateException("Unexpected value: " + choiceIndex + ". Please report this bug");
+		};
 
 		// then throw the potion
 		var potionEntity = new PotionEntity(getWorld(), this);
-		potionEntity.setItem(PotionUtil.setPotion(new ItemStack(Items.SPLASH_POTION), potion));
+		potionEntity.setItem(PotionUtil.setCustomPotionEffects(new ItemStack(Items.SPLASH_POTION), List.of(statusEffect)));
 		potionEntity.setPitch(potionEntity.getPitch() + 20.0f);
 		potionEntity.setVelocity(deltaX, deltaY + targetDistance * 0.2f, deltaZ, 0.75f, 8.0f);
 		if (!isSilent()) {
@@ -132,10 +127,10 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 		return false;
 	}
 
-//	@Override
-//	public int getXpToDrop() {
-//		return 1 + this.getWorld().random.nextInt(3);
-//	}
+	@Override
+	public int getXpToDrop() {
+		return 0;
+	}
 
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {

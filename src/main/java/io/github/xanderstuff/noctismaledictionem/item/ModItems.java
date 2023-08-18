@@ -17,7 +17,7 @@ import net.minecraft.util.Identifier;
 public class ModItems {
 	public static final Item VIAL = new VialItem(new FabricItemSettings().maxCount(1));
 	public static final Item VIAL_EMPTY = new VialEmptyItem(new FabricItemSettings().maxCount(64));
-	public static final Item CRONE_SPAWN_EGG = new SpawnEggItem(ModEntities.CRONE, 0xFFFFFF, 0x000000, new FabricItemSettings());
+	public static final Item CRONE_SPAWN_EGG = new SpawnEggItem(ModEntities.CRONE, 0x4c4033, 0xf3f3ed, new FabricItemSettings());
 
 	public static void registerAll() {
 		registerItem("vial", VIAL);
