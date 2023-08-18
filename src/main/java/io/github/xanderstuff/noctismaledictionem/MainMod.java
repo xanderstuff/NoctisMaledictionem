@@ -1,8 +1,8 @@
 package io.github.xanderstuff.noctismaledictionem;
 
-import io.github.xanderstuff.noctismaledictionem.entity.Entities;
-import io.github.xanderstuff.noctismaledictionem.item.ItemGroups;
-import io.github.xanderstuff.noctismaledictionem.item.Items;
+import io.github.xanderstuff.noctismaledictionem.entity.ModEntities;
+import io.github.xanderstuff.noctismaledictionem.item.ModItemGroups;
+import io.github.xanderstuff.noctismaledictionem.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -14,8 +14,8 @@ public class MainMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ItemGroups.registerAll();
-		Items.registerAll();
-		Entities.registerAll();
+		ModItemGroups.registerAll();
+		ModItems.registerAll();
+		ModEntities.registerAll();
 	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-public class Entities {
+public class ModEntities {
 	public static final EntityType<CroneEntity> CRONE = FabricEntityTypeBuilder
 			// use MISC spawngroup for no spawn cap - used if an entity is not spawned naturally
 			.create(SpawnGroup.MISC, CroneEntity::new)
