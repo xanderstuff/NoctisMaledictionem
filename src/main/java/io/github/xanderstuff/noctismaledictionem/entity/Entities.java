@@ -14,7 +14,7 @@ public class Entities {
 	public static final EntityType<CroneEntity> CRONE = FabricEntityTypeBuilder
 			// use MISC spawngroup for no spawn cap - used if an entity is not spawned naturally
 			.create(SpawnGroup.MISC, CroneEntity::new)
-			.dimensions(EntityDimensions.fixed(0.9f, 1.4f)) //FIXME: hitbox size needs to be adjusted to fit model
+			.dimensions(EntityDimensions.fixed(0.9f, 1.8f))
 			.build();
 
 	public static void registerAll() {
