@@ -18,7 +18,7 @@ public class Entities {
 			.build();
 
 	public static void registerAll() {
-		Registry.register(Registries.ENTITY_TYPE, new Identifier(MainMod.MODID, "crone"), CRONE);
+		Registry.register(Registries.ENTITY_TYPE, new Identifier(MainMod.MOD_ID, "crone"), CRONE);
 		FabricDefaultAttributeRegistry.register(CRONE, CroneEntity.setAttributes());
 
 

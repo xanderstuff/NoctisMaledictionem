@@ -13,17 +13,17 @@ import software.bernie.geckolib.model.data.EntityModelData;
 public class CroneEntityModel extends GeoModel<CroneEntity> {
 	@Override
 	public Identifier getModelResource(CroneEntity animatable) {
-		return new Identifier(MainMod.MODID, "geo/crone.geo.json");
+		return new Identifier(MainMod.MOD_ID, "geo/crone.geo.json");
 	}
 
 	@Override
 	public Identifier getTextureResource(CroneEntity animatable) {
-		return new Identifier(MainMod.MODID, "textures/entity/crone.png");
+		return new Identifier(MainMod.MOD_ID, "textures/entity/crone.png");
 	}
 
 	@Override
 	public Identifier getAnimationResource(CroneEntity animatable) {
-		return new Identifier(MainMod.MODID, "animations/crone.animation.json");
+		return new Identifier(MainMod.MOD_ID, "animations/crone.animation.json");
 	}
 
 	@Override
