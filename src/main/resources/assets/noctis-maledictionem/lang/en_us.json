@@ -2,5 +2,6 @@
 	"itemgroup.noctis-maledictionem.main": "Noctis Maledictionem",
 	"item.noctis-maledictionem.vial": "Vial",
 	"item.noctis-maledictionem.vial_empty": "Empty Vial",
+	"entity.noctis-maledictionem.crone": "Crone",
 	"item.noctis-maledictionem.crone_spawn_egg": "Crone Spawn Egg"
 }
