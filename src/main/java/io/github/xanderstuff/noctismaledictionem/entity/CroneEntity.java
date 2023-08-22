@@ -1,10 +1,7 @@
 package io.github.xanderstuff.noctismaledictionem.entity;
 
 import io.github.xanderstuff.noctismaledictionem.util.RandomUtil;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RangedAttackMob;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -20,8 +17,10 @@ import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.TimeHelper;
@@ -35,6 +34,7 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
+import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -58,6 +58,9 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 			StatusEffects.POISON, // blocked for lore reasons alone
 			StatusEffects.LEVITATION // blocked for lore reasons alone
 	);
+	private static final RawAnimation MOVE = RawAnimation.begin().thenLoop("animation.crone.move");
+	private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.crone.idle");
+	//private static final RawAnimation HURT = RawAnimation.begin().thenPlay("animation.crone.hurt");
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 	public CroneEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
@@ -86,7 +89,7 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 
 		goalSelector.add(2, new ProjectileAttackGoal(this, 0.8, 60, 10.0F));
 		goalSelector.add(3, new WanderAroundFarGoal(this, 0.6, 1.0f));
-		//		this.goalSelector.add(4, new TemptGoal(this, 1.25, Ingredient.ofItems(Items.WHEAT), false));
+//		goalSelector.add(4, new TemptGoal(this, 1.25, Ingredient.ofItems(Items.WHEAT), false));
 		goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
 		goalSelector.add(5, new LookAroundGoal(this)); //FIXME: what actually happens when a goal's priority is the same as another one?
 
@@ -97,24 +100,33 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-		controllerRegistrar.add(new AnimationController<>(this, "controller", 0, this::predicate));
+		controllerRegistrar.add(new AnimationController<>(this, "Main", 0, this::mainAnimationHandler));
 	}
 
-	private <T extends GeoAnimatable> PlayState predicate(AnimationState<T> animationState) {
+	private <T extends GeoAnimatable> PlayState mainAnimationHandler(AnimationState<T> animationState) {
 		var animationController = animationState.getController();
-		//TODO: other animations
-		//TODO: override damage(DamageSource source, float amount), if super.damage() is true, then set damaged flat to true, for this animation to play once then reset flag
+
+		// note: the hurt animation is disabled since it's not particularly noticeable and conflicts with AI-controlled head movement
+//		if (shouldPlayHurtAnimation()) { //TODO: perhaps check animationController.hasAnimationFinished()
+//			//DebugUtil.sendChat(this, "hurt", String.valueOf(hurtTime));
+//			animationController.setAnimation(HURT);
+//			return PlayState.CONTINUE;
+//		}
 
 		if (animationState.isMoving()) {
-			animationController.setAnimation(RawAnimation.begin().thenLoop("animation.crone.move"));
+//			animationController.transitionLength(8); // transition time disabled due to issue with base animation, which is what is transitioned from on-spawn
+			animationController.setAnimation(MOVE);
 			return PlayState.CONTINUE;
 		}
 
-		//.then("animation.crone.idle", Animation.LoopType.LOOP)
-		animationController.setAnimation(RawAnimation.begin().thenLoop("animation.crone.idle"));
-
+//		animationController.transitionLength(8); // transition time disabled due to issue with base animation, which is what is transitioned from on-spawn
+		animationController.setAnimation(IDLE);
 		return PlayState.CONTINUE;
 	}
+
+//	public boolean shouldPlayHurtAnimation() {
+//		return hurtTime > 0;
+//	}
 
 	@Override
 	public void attack(LivingEntity target, float pullProgress) {
@@ -148,7 +160,7 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 		potionEntity.setVelocity(deltaX, deltaY + targetDistance * 0.2f, deltaZ, 0.75f, 8.0f);
 		if (!isSilent()) {
 			//TODO: should there be a custom ENTITY_CRONE_THROW sound event? (mainly for proper subtitles?)
-			getWorld().playSound(null, getX(), getY(), getZ(), SoundEvents.ENTITY_WITCH_THROW, this.getSoundCategory(), 1.0f, 0.8f + random.nextFloat() * 0.4f);
+			getWorld().playSound(null, getX(), getY(), getZ(), SoundEvents.ENTITY_WITCH_THROW, getSoundCategory(), 1.0f, 0.8f + random.nextFloat() * 0.4f);
 		}
 
 		getWorld().spawnEntity(potionEntity);
@@ -194,21 +206,38 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 	}
 
 	@Override
+	protected void updatePostDeath() {
+		// This method is overriding LivingEntity#updatePostDeath to remove the death animation (falling over)
+		// and to remove the entity instantly as opposed to waiting 20 ticks for the death animation to finish.
+		// We also want to spawn a large cloud of particles upon "dying"
+
+		if (!getWorld().isClient() && !isRemoved()) {
+//			for (int i = 0; i < 20; i++) {
+//				getWorld().sendEntityStatus(this, EntityStatuses.ADD_DEATH_PARTICLES);
+//			}
+//			((ServerWorld) getWorld()).spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, getX(), getY() + 1, getZ(), 500, 0.2, 0.6, 0.2, 0.02);
+			((ServerWorld) getWorld()).spawnParticles(ParticleTypes.SMOKE, getX(), getY() + 1, getZ(), 3000, 0.5, 0.9, 0.5, 0.01);
+
+			remove(Entity.RemovalReason.KILLED);
+		}
+	}
+
+	@Override
 	protected SoundEvent getAmbientSound() {
-		//TODO: should there be a custom ENTITY_CRONE_AMBIENT sound event? (mainly for proper subtitles?)
+		//TODO: make custom ENTITY_CRONE_AMBIENT sound event
 		return SoundEvents.ENTITY_WITCH_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		//TODO: should there be a custom ENTITY_CRONE_HURT sound event? (mainly for proper subtitles?)
+		//TODO: make custom ENTITY_CRONE_HURT sound event
 		return SoundEvents.ENTITY_WITCH_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		//TODO: should there be a custom ENTITY_CRONE_DEATH sound event? (mainly for proper subtitles?)
-		return SoundEvents.ENTITY_WITCH_DEATH;
+		//TODO: make custom ENTITY_CRONE_DEATH sound event
+		return SoundEvents.AMBIENT_CAVE.value(); //TODO: the custom SoundEvent should only play cave4, cave8, and cave11
 	}
 
 	@Override
