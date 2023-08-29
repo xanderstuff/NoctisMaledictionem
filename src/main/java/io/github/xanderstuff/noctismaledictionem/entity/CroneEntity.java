@@ -1,5 +1,6 @@
 package io.github.xanderstuff.noctismaledictionem.entity;
 
+import io.github.xanderstuff.noctismaledictionem.item.ModItems;
 import io.github.xanderstuff.noctismaledictionem.util.RandomUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RangedAttackMob;
@@ -26,6 +27,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.village.TradeOfferList;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -43,8 +45,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-//TODO: perhaps the Crone should extend MerchantEntity for trading?
-public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable, RangedAttackMob {
+public class CroneEntity extends AbstractTraderEntity implements GeoEntity, Angerable, RangedAttackMob {
 	private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
 	@Nullable
 	private UUID angryAt;
@@ -127,6 +128,29 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 //	public boolean shouldPlayHurtAnimation() {
 //		return hurtTime > 0;
 //	}
+
+	@Override
+	protected TradeOfferList createTradeOffers() {
+		var list = new TradeOfferList();
+		list.add(createTradeOffer(Items.DIAMOND, 1, ModItems.VIAL_EMPTY, 1, Integer.MAX_VALUE));
+
+		list.add(RandomUtil.pickOne(random,
+				createTradeOffer(Items.DIAMOND, 24, Items.SAND, 1, Integer.MAX_VALUE),
+				createTradeOffer(Items.DIAMOND, 24, Items.RED_SAND, 1, Integer.MAX_VALUE),
+				createTradeOffer(Items.DIAMOND, 24, Items.GRAVEL, 1, Integer.MAX_VALUE)
+		));
+
+		if (random.nextFloat() < 0.333f) {
+			list.add(createTradeOffer(Items.COPPER_INGOT, 8, Items.IRON_INGOT, 1, Integer.MAX_VALUE));
+		}
+		if (random.nextFloat() < 0.333f) {
+			list.add(createTradeOffer(Items.IRON_INGOT, 8, Items.GOLD_INGOT, 1, Integer.MAX_VALUE));
+		}
+		if (random.nextFloat() < 0.333f) {
+			list.add(createTradeOffer(Items.GOLD_INGOT, 8, Items.DIAMOND, 1, Integer.MAX_VALUE));
+		}
+		return list;
+	}
 
 	@Override
 	public void attack(LivingEntity target, float pullProgress) {
@@ -225,7 +249,7 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 	@Override
 	protected SoundEvent getAmbientSound() {
 		//TODO: make custom ENTITY_CRONE_AMBIENT sound event
-		return SoundEvents.ENTITY_WITCH_AMBIENT;
+		return hasCustomer() ? SoundEvents.ENTITY_VILLAGER_TRADE : SoundEvents.ENTITY_WITCH_AMBIENT;
 	}
 
 	@Override
@@ -238,6 +262,21 @@ public class CroneEntity extends PathAwareEntity implements GeoEntity, Angerable
 	protected SoundEvent getDeathSound() {
 		//TODO: make custom ENTITY_CRONE_DEATH sound event
 		return SoundEvents.AMBIENT_CAVE.value(); //TODO: the custom SoundEvent should only play cave4, cave8, and cave11
+	}
+
+	@Override
+	protected SoundEvent getTradeSuccessfulSound() {
+		return SoundEvents.ENTITY_VILLAGER_YES;
+	}
+
+	@Override
+	protected SoundEvent getTradeFailedSound() {
+		return SoundEvents.ENTITY_VILLAGER_NO;
+	}
+
+	@Override
+	public SoundEvent getTradeAcceptableSound() {
+		return SoundEvents.ENTITY_VILLAGER_YES;
 	}
 
 	@Override
