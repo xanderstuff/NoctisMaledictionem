@@ -25,12 +25,12 @@ public class ModItems {
 		registerItem("crone_spawn_egg", CRONE_SPAWN_EGG, ItemGroups.SPAWN_EGGS);
 	}
 
-	private static void registerItem(String id, Item item) {
+	public static void registerItem(String id, Item item) {
 		Registry.register(Registries.ITEM, new Identifier(MainMod.MOD_ID, id), item);
 		addToItemGroup(ModItemGroups.MAIN, item);
 	}
 
-	private static void registerItem(String id, Item item, RegistryKey<ItemGroup> itemGroup) {
+	public static void registerItem(String id, Item item, RegistryKey<ItemGroup> itemGroup) {
 		Registry.register(Registries.ITEM, new Identifier(MainMod.MOD_ID, id), item);
 		addToItemGroup(ModItemGroups.MAIN, item);
 		addToItemGroup(itemGroup, item);

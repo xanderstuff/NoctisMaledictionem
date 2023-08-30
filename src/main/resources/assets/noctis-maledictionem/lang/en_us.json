@@ -8,5 +8,6 @@
 	"subtitles.noctis-maledictionem.entity.crone.attack": "Crone attacks",
 	"subtitles.noctis-maledictionem.entity.crone.hurt": "Crone hurts",
 	"subtitles.noctis-maledictionem.entity.crone.death": "Crone disappears",
-	"subtitles.noctis-maledictionem.entity.crone.trade.accepted": "Crone makes a deal"
+	"subtitles.noctis-maledictionem.entity.crone.trade.accepted": "Crone makes a deal",
+	"block.noctis-maledictionem.aconite": "Aconite"
 }

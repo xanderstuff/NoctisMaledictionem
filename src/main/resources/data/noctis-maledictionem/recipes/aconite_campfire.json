@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:campfire_cooking",
+	"ingredient": {
+		"item": "noctis-maledictionem:aconite"
+	},
+	"result": "noctis-maledictionem:aconite",
+	"experience": 0,
+	"cookingtime": 600
+}
