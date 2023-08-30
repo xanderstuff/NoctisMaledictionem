@@ -1,0 +1,90 @@
+{
+	"entity.crone.idle": {
+		"sounds": [
+			{
+				"name": "noctis-maledictionem:entity/crone/crone_idle",
+				"volume": 0.3
+			},
+			{
+				"name": "noctis-maledictionem:entity/crone/crone_idle_2",
+				"volume": 0.3
+			},
+			{
+				"name": "noctis-maledictionem:entity/crone/crone_idle_3",
+				"volume": 0.3
+			}
+		],
+		"subtitle": "subtitles.noctis-maledictionem.entity.crone.idle"
+	},
+	"entity.crone.attack": {
+		"sounds": [
+			"noctis-maledictionem:entity/crone/crone_attack"
+		],
+		"subtitle": "subtitles.noctis-maledictionem.entity.crone.attack"
+	},
+	"entity.crone.throw_potion": {
+		"sounds": [
+			{
+				"name": "entity/witch/throw1",
+				"volume": 2.0
+			},
+			{
+				"name": "entity/witch/throw2",
+				"volume": 2.0
+			},
+			{
+				"name": "entity/witch/throw3",
+				"volume": 2.0
+			}
+		],
+		"subtitle.DISABLED": "subtitles.noctis-maledictionem.entity.crone.throw_potion"
+	},
+	"entity.crone.hurt": {
+		"sounds": [
+			{
+				"name": "noctis-maledictionem:entity/crone/crone_hurt",
+				"volume": 0.7
+			}
+		],
+		"subtitle": "subtitles.noctis-maledictionem.entity.crone.hurt"
+	},
+	"entity.crone.death": {
+		"sounds": [
+			{
+				"name": "ambient/cave/cave4",
+				"volume": 1.0,
+				"pitch": 1.0
+			},
+			{
+				"name": "ambient/cave/cave8",
+				"volume": 1.6,
+				"pitch": 1.3
+			},
+			{
+				"name": "ambient/cave/cave11",
+				"volume": 1.5,
+				"pitch": 1.1
+			}
+		],
+		"subtitle": "subtitles.noctis-maledictionem.entity.crone.death"
+	},
+	"entity.crone.trade.agree": {
+		"sounds": [
+		],
+		"subtitle.DISABLED": "subtitles.noctis-maledictionem.entity.crone.trade.agree"
+	},
+	"entity.crone.trade.disagree": {
+		"sounds": [
+		],
+		"subtitle.DISABLED": "subtitles.noctis-maledictionem.entity.crone.trade.disagree"
+	},
+	"entity.crone.trade.accepted": {
+		"sounds": [
+			{
+				"name": "noctis-maledictionem:entity/crone/crone_trade",
+				"volume": 0.7
+			}
+		],
+		"subtitle": "subtitles.noctis-maledictionem.entity.crone.trade.accepted"
+	}
+}

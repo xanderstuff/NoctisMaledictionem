@@ -1,6 +1,7 @@
 package io.github.xanderstuff.noctismaledictionem.entity;
 
 import io.github.xanderstuff.noctismaledictionem.item.ModItems;
+import io.github.xanderstuff.noctismaledictionem.sound.ModSoundEvents;
 import io.github.xanderstuff.noctismaledictionem.util.RandomUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RangedAttackMob;
@@ -23,7 +24,6 @@ import net.minecraft.potion.PotionUtil;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
@@ -183,8 +183,8 @@ public class CroneEntity extends AbstractTraderEntity implements GeoEntity, Ange
 		potionEntity.setPitch(potionEntity.getPitch() + 20.0f);
 		potionEntity.setVelocity(deltaX, deltaY + targetDistance * 0.2f, deltaZ, 0.75f, 8.0f);
 		if (!isSilent()) {
-			//TODO: should there be a custom ENTITY_CRONE_THROW sound event? (mainly for proper subtitles?)
-			getWorld().playSound(null, getX(), getY(), getZ(), SoundEvents.ENTITY_WITCH_THROW, getSoundCategory(), 1.0f, 0.8f + random.nextFloat() * 0.4f);
+			getWorld().playSound(null, getX(), getY(), getZ(), ModSoundEvents.ENTITY_CRONE_THROW_POTION, getSoundCategory(), 1.0f, 0.8f + random.nextFloat() * 0.4f);
+			getWorld().playSound(null, getX(), getY(), getZ(), ModSoundEvents.ENTITY_CRONE_ATTACK, getSoundCategory(), 1.0f, 0.8f + random.nextFloat() * 0.4f);
 		}
 
 		getWorld().spawnEntity(potionEntity);
@@ -247,36 +247,39 @@ public class CroneEntity extends AbstractTraderEntity implements GeoEntity, Ange
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound() {
-		//TODO: make custom ENTITY_CRONE_AMBIENT sound event
-		return hasCustomer() ? SoundEvents.ENTITY_VILLAGER_TRADE : SoundEvents.ENTITY_WITCH_AMBIENT;
+	protected SoundEvent getNormalAmbientSound() {
+		return ModSoundEvents.ENTITY_CRONE_IDLE;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		//TODO: make custom ENTITY_CRONE_HURT sound event
-		return SoundEvents.ENTITY_WITCH_HURT;
+		return ModSoundEvents.ENTITY_CRONE_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		//TODO: make custom ENTITY_CRONE_DEATH sound event
-		return SoundEvents.AMBIENT_CAVE.value(); //TODO: the custom SoundEvent should only play cave4, cave8, and cave11
+		return ModSoundEvents.ENTITY_CRONE_DEATH;
+	}
+
+	@Override
+	protected SoundEvent getTradeAmbientSound() {
+//		return ModSoundEvents.ENTITY_CRONE_TRADE_IDLE; // we don't have a sound for this, so we'll just use the normal idle sound instead
+		return ModSoundEvents.ENTITY_CRONE_IDLE;
 	}
 
 	@Override
 	protected SoundEvent getTradeSuccessfulSound() {
-		return SoundEvents.ENTITY_VILLAGER_YES;
+		return ModSoundEvents.ENTITY_CRONE_TRADE_ACCEPTED;
 	}
 
 	@Override
-	protected SoundEvent getTradeFailedSound() {
-		return SoundEvents.ENTITY_VILLAGER_NO;
+	protected SoundEvent getTradeDisagreeSound() {
+		return ModSoundEvents.ENTITY_CRONE_TRADE_DISAGREE; // no sound (intentional)
 	}
 
 	@Override
-	public SoundEvent getTradeAcceptableSound() {
-		return SoundEvents.ENTITY_VILLAGER_YES;
+	public SoundEvent getTradeAgreeSound() {
+		return ModSoundEvents.ENTITY_CRONE_TRADE_AGREE; // no sound (intentional)
 	}
 
 	@Override

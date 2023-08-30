@@ -3,5 +3,10 @@
 	"item.noctis-maledictionem.vial": "Vial",
 	"item.noctis-maledictionem.vial_empty": "Empty Vial",
 	"entity.noctis-maledictionem.crone": "Crone",
-	"item.noctis-maledictionem.crone_spawn_egg": "Crone Spawn Egg"
+	"item.noctis-maledictionem.crone_spawn_egg": "Crone Spawn Egg",
+	"subtitles.noctis-maledictionem.entity.crone.idle": "Crone whispers",
+	"subtitles.noctis-maledictionem.entity.crone.attack": "Crone attacks",
+	"subtitles.noctis-maledictionem.entity.crone.hurt": "Crone hurts",
+	"subtitles.noctis-maledictionem.entity.crone.death": "Crone disappears",
+	"subtitles.noctis-maledictionem.entity.crone.trade.accepted": "Crone makes a deal"
 }

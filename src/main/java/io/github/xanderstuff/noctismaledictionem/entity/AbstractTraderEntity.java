@@ -63,7 +63,10 @@ public abstract class AbstractTraderEntity extends PathAwareEntity implements Me
 	@Override
 	public void trade(TradeOffer offer) {
 		offer.use();
-		ambientSoundChance = -getMinAmbientSoundDelay();
+		if (!isClient() && !isSilent() && ambientSoundChance > -getMinAmbientSoundDelay() + 20) {
+			ambientSoundChance = -getMinAmbientSoundDelay();
+			playSound(getTradeSuccessfulSound(), getSoundVolume(), getSoundPitch());
+		}
 
 		// xp orb spawning is normally handled in MerchantEntity#afterUsing
 //		if (offer.shouldRewardPlayerExperience()) { // note: a TradeOffer has no public method to set shouldRewardPlayerExperience for some unknown reason. It's default true, and normally only changeable via NBT editing
@@ -82,16 +85,18 @@ public abstract class AbstractTraderEntity extends PathAwareEntity implements Me
 	}
 
 	@Override
-	public void onSellingItem(ItemStack itemStack) {
-		// This method actually only runs when an item is *attempted* to be sold. itemStack may be empty
-		if (!isClient() && ambientSoundChance > -getMinAmbientSoundDelay() + 20) {
-			ambientSoundChance = -getMinAmbientSoundDelay();
-			if (itemStack.isEmpty()) {
-				playSound(getTradeFailedSound(), getSoundVolume(), getSoundPitch());
-			} else {
-				playSound(getTradeSuccessfulSound(), getSoundVolume(), getSoundPitch());
-			}
-		}
+	public void onSellingItem(ItemStack outputItem) {
+		// This method actually runs when the trade output/input slots are updated (AND when an item is sold)
+		//FIXME: playing a sound here and resetting the ambientSoundChance (which is actually a cooldown timer) would
+		// prevent playing sounds from trade() (if it also uses the cooldown), which is called after this method
+//		if (!isClient() && !isSilent() && ambientSoundChance > -getMinAmbientSoundDelay() + 20) {
+//			ambientSoundChance = -getMinAmbientSoundDelay();
+//			if (outputItem.isEmpty()) {
+//				playSound(getTradeDisagreeSound(), getSoundVolume(), getSoundPitch());
+//			} else {
+//				playSound(getTradeAgreeSound(), getSoundVolume(), getSoundPitch()); //FIXME: this sound will play at the same time that trade() plays the sound from getTradeSuccessfulSound()
+//			}
+//		}
 	}
 
 	@Override
@@ -143,15 +148,24 @@ public abstract class AbstractTraderEntity extends PathAwareEntity implements Me
 		// This appears to only be implemented for client-side rendering of the trading GUI (in the MerchantScreenHandler class).
 	}
 
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return hasCustomer() ? getTradeAmbientSound() : getNormalAmbientSound();
+	}
+
+	protected abstract SoundEvent getNormalAmbientSound();
+
+	protected abstract SoundEvent getTradeAmbientSound();
+
 	protected abstract SoundEvent getTradeSuccessfulSound(); // normally uses the same sound as getYesSound()
 
-	protected abstract SoundEvent getTradeFailedSound();
+	protected abstract SoundEvent getTradeDisagreeSound();
 
-	protected abstract SoundEvent getTradeAcceptableSound();
+	protected abstract SoundEvent getTradeAgreeSound();
 
 	@Override
 	public SoundEvent getYesSound() {
-		return getTradeAcceptableSound(); // Redirected to a method with a different name to be more clear with what this does
+		return getTradeAgreeSound(); // Redirected to a method with a different name to be more clear with what this does
 	}
 
 	@Override
