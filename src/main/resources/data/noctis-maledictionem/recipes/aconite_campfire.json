@@ -3,7 +3,7 @@
 	"ingredient": {
 		"item": "noctis-maledictionem:aconite"
 	},
-	"result": "noctis-maledictionem:aconite",
+	"result": "minecraft:air",
 	"experience": 0,
 	"cookingtime": 600
 }

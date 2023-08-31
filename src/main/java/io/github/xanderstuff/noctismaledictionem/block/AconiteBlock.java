@@ -19,5 +19,6 @@ public class AconiteBlock extends FlowerBlock {
 		double z = pos.getZ() + 0.5;
 		//FIXME: replace these testing particles with the intended effect
 		serverWorld.spawnParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 20, 0.25, 0.25, 0.25, 0.01);
+		//TODO: add thicker/darker smoke particles
 	}
 }
