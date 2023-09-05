@@ -2,6 +2,8 @@ package io.github.xanderstuff.noctismaledictionem.entity.client;
 
 import io.github.xanderstuff.noctismaledictionem.MainMod;
 import io.github.xanderstuff.noctismaledictionem.entity.CroneEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib.constant.DataTickets;
@@ -10,6 +12,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
+@Environment(EnvType.CLIENT)
 public class CroneEntityModel extends GeoModel<CroneEntity> {
 	@Override
 	public Identifier getModelResource(CroneEntity animatable) {
