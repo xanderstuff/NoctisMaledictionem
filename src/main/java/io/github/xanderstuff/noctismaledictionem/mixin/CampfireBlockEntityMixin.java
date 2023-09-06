@@ -26,4 +26,17 @@ public class CampfireBlockEntityMixin {
 			}
 		}
 	}
+
+	//TODO: this could be moved to a separate Mixin class within the client sources instead
+	@Inject(method = "clientTick", at = @At(value = "HEAD"))
+	private static void noctismaledictionem$checkForAconiteInCampfiresClientside(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
+//		if (world instanceof ClientWorld clientWorld) {
+		for (ItemStack itemStack : campfire.getItemsBeingCooked()) {
+			if (itemStack.isOf(ModBlocks.ACONITE.asItem())) {
+				AconiteBlock.onAconiteInCampfireClientTick(world, pos, state, campfire);
+				break;
+			}
+		}
+//		}
+	}
 }

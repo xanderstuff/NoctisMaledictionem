@@ -4,6 +4,7 @@ import io.github.xanderstuff.noctismaledictionem.block.ModBlocks;
 import io.github.xanderstuff.noctismaledictionem.entity.ModEntities;
 import io.github.xanderstuff.noctismaledictionem.item.ModItemGroups;
 import io.github.xanderstuff.noctismaledictionem.item.ModItems;
+import io.github.xanderstuff.noctismaledictionem.particle.ModParticles;
 import io.github.xanderstuff.noctismaledictionem.sound.ModSoundEvents;
 import net.fabricmc.api.ModInitializer;
 
@@ -17,6 +18,7 @@ public class MainMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModSoundEvents.registerAll();
+		ModParticles.registerAll();
 		ModItemGroups.registerAll();
 		ModItems.registerAll();
 		ModBlocks.registerAll();
