@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_aconite": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "noctis-maledictionem:aconite"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "noctis-maledictionem:aconite_campfire"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_aconite",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "noctis-maledictionem:aconite_campfire"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -22,6 +22,9 @@
 		],
 		"client": [
 			"io.github.xanderstuff.noctismaledictionem.ClientMod"
+		],
+		"fabric-datagen": [
+			"io.github.xanderstuff.noctismaledictionem.datagen.DataGenerationEntrypoint"
 		]
 	},
 	"mixins": [
