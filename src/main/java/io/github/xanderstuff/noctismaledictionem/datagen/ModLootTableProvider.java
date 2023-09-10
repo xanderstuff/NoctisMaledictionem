@@ -15,6 +15,6 @@ public class ModLootTableProvider extends FabricBlockLootTableProvider {
 		// and see VanillaBlockLootTableGenerator for examples
 
 		addDrop(ModBlocks.ACONITE);
-//		addPottedPlantDrops(ModBlocks.POTTED_ACONITE); //TODO
+		addPottedPlantDrops(ModBlocks.POTTED_ACONITE);
 	}
 }

@@ -2,6 +2,7 @@ package io.github.xanderstuff.noctismaledictionem.block;
 
 import io.github.xanderstuff.noctismaledictionem.MainMod;
 import io.github.xanderstuff.noctismaledictionem.item.ModItems;
+import io.github.xanderstuff.noctismaledictionem.mixin.BlocksAccessorMixin;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -17,10 +18,11 @@ import net.minecraft.util.Identifier;
 
 public class ModBlocks {
 	public static final Block ACONITE = new AconiteBlock(FabricBlockSettings.copyOf(Blocks.ALLIUM));
+	public static final Block POTTED_ACONITE = BlocksAccessorMixin.callCreateFlowerPotBlock(ACONITE);
 
 	public static void registerAll() {
 		registerBlockAndDefaultItem("aconite", ACONITE, ItemGroups.NATURAL);
-
+		registerBlock("potted_aconite", POTTED_ACONITE);
 	}
 
 	//note: since there's 4 different block registration methods already,

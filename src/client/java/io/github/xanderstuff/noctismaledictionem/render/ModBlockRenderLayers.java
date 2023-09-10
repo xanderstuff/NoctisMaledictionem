@@ -11,5 +11,6 @@ public class ModBlockRenderLayers {
 	public static void registerAll() {
 		//note: see net.minecraft.client.render.RenderLayer for examples from minecraft
 		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ACONITE, RenderLayer.getCutout());
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_ACONITE, RenderLayer.getCutout());
 	}
 }

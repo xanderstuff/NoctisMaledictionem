@@ -18,9 +18,9 @@ public class ModModelProvider extends FabricModelProvider {
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
 		// note: see BlockStateModelGenerator.register() for examples
 
-		// registerFlowerPotPlant() (called createPlant in Mojang mappings) will run registerTintableCross() for us.
-		blockStateModelGenerator.registerTintableCross(ModBlocks.ACONITE, BlockStateModelGenerator.TintType.NOT_TINTED);
-//		blockStateModelGenerator.registerFlowerPotPlant(ModBlocks.ACONITE, ModBlocks.POTTED_ACONITE, BlockStateModelGenerator.TintType.NOT_TINTED); //TODO
+		// registerFlowerPotPlant() will actually register ModBlocks.ACONITE using registerTintableCross() for us (it's called createPlant in Mojang mappings)
+		// blockStateModelGenerator.registerTintableCross(ModBlocks.ACONITE, BlockStateModelGenerator.TintType.NOT_TINTED);
+		blockStateModelGenerator.registerFlowerPotPlant(ModBlocks.ACONITE, ModBlocks.POTTED_ACONITE, BlockStateModelGenerator.TintType.NOT_TINTED);
 
 		// Spawn eggs have to be generated in generateBlockStateModels() instead of generateItemModels() for some unknown reason. Minecraft is weird.
 		blockStateModelGenerator.registerParentedItemModel(ModItems.CRONE_SPAWN_EGG, ModelIds.getMinecraftNamespacedItem("template_spawn_egg")); // this has to be done in generateBlockStateModels() instead for some unknown reason
